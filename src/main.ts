@@ -1,14 +1,14 @@
 /* import "./style.css";
  */
-let score: number = 0;
-const cardButton = document.querySelector(".card-button");
-const stopButton = document.querySelector(".stop-button");
-const resetButton = document.querySelector(".reset-button");
-const container = document.querySelector(".card-container");
-const containerSecondary = document.querySelector(".container-secondary");
-let cardNumber: number = 0;
-let isGameOver: boolean = false;
-let isFirstCard: boolean = false;
+
+import {
+  gameState,
+  container,
+  cardButton,
+  containerSecondary,
+  stopButton,
+  resetButton,
+} from "./modelo";
 
 function showScore() {
   let scoreContainer = document.querySelector(".score");
@@ -17,21 +17,22 @@ function showScore() {
     scoreContainer !== undefined &&
     scoreContainer instanceof HTMLParagraphElement
   ) {
-    scoreContainer.textContent = "Puntuación:" + " " + score.toString();
+    scoreContainer.textContent =
+      "Puntuación:" + " " + gameState.score.toString();
   }
 }
 
 function calculateRandomNumber(): number {
-  cardNumber = Math.floor(Math.random() * 10) + 1;
-  return cardNumber;
+  gameState.cardNumber = Math.floor(Math.random() * 10) + 1;
+  return gameState.cardNumber;
 }
 
 function giveMeCard(): number {
   calculateRandomNumber();
-  if (cardNumber > 7) {
-    cardNumber += 2;
+  if (gameState.cardNumber > 7) {
+    gameState.cardNumber += 2;
   }
-  return cardNumber;
+  return gameState.cardNumber;
 }
 
 function showCard(card: number): string {
@@ -100,9 +101,9 @@ function printCard(cardImageUrl: string): void {
     container !== undefined &&
     container instanceof HTMLDivElement
   ) {
-    if (!isFirstCard) {
+    if (!gameState.isFirstCard) {
       container.innerHTML = "";
-      isFirstCard = true;
+      gameState.isFirstCard = true;
     }
     container.innerHTML += `<img class="card" src="${cardImageUrl}" alt="Carta"/>`;
   }
@@ -111,35 +112,35 @@ function printCard(cardImageUrl: string): void {
 function calculateScore(card: number): void {
   let cardValue: number = card >= 10 ? 0.5 : card;
 
-  score += cardValue;
+  gameState.score += cardValue;
   showScore();
   handleGameOver();
 }
 
 function handleGameOver(): void {
   setTimeout(() => {
-    if (score > 7.5 && !isGameOver) {
+    if (gameState.score > 7.5 && !gameState.isGameOver) {
       alert("Game over");
       disableCardButton();
-      isGameOver = true;
-    } else if (score === 7.5 && !isGameOver) {
+      gameState.isGameOver = true;
+    } else if (gameState.score === 7.5 && !gameState.isGameOver) {
       alert("¡Lo has clavado! ¡Enhorabuena!");
       disableCardButton();
-      isGameOver = true;
+      gameState.isGameOver = true;
     }
   }, 2000);
 }
 
 function showMessage() {
-  if (score > 7.5) {
+  if (gameState.score > 7.5) {
     alert("Game over");
-  } else if (score < 4) {
+  } else if (gameState.score < 4) {
     alert("Has sido muy conservador");
-  } else if (score === 5) {
+  } else if (gameState.score === 5) {
     alert("Te ha entrado el canguelo eh?");
-  } else if (score === 6 || score == 7) {
+  } else if (gameState.score === 6 || gameState.score == 7) {
     alert("Casi casi...");
-  } else if (score === 7.5) {
+  } else if (gameState.score === 7.5) {
     alert("¡Lo has clavado! ¡Enhorabuena!");
   }
 }
@@ -196,12 +197,12 @@ function showInitialCardBack() {
     container instanceof HTMLDivElement
   ) {
     container.innerHTML = `<img class="card" src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg" alt="Carta boca abajo"/>`;
-    isFirstCard = false;
+    gameState.isFirstCard = false;
   }
 }
 
 function reset() {
-  score = 0;
+  gameState.score = 0;
   showScore();
 
   if (
@@ -220,7 +221,7 @@ function reset() {
     containerSecondary.innerHTML = "";
   }
 
-  isGameOver = false;
+  gameState.isGameOver = false;
 
   enableCardButton();
   showInitialCardBack();
