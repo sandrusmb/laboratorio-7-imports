@@ -1,14 +1,16 @@
-export interface GameState {
+export type GameState = "PLAYING" | "GAME_OVER" | "PERFECT_SCORE";
+
+export interface Game {
   score: number;
   cardNumber: number;
-  isGameOver: boolean;
+  state: GameState;
   isFirstCard: boolean;
 }
 
-export const gameState: GameState = {
+export const partida: Game = {
   score: 0,
   cardNumber: 0,
-  isGameOver: false,
+  state: "PLAYING",
   isFirstCard: false,
 };
 

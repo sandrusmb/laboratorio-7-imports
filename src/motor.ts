@@ -1,37 +1,36 @@
-import { gameState } from "./modelo";
+import { partida } from "./modelo";
 import { showScore, disableCardButton } from "./ui";
 
 function calculateRandomNumber(): number {
-  gameState.cardNumber = Math.floor(Math.random() * 10) + 1;
-  return gameState.cardNumber;
+  partida.cardNumber = Math.floor(Math.random() * 10) + 1;
+  return partida.cardNumber;
 }
 
 export function giveMeCard(): number {
   calculateRandomNumber();
-  if (gameState.cardNumber > 7) {
-    gameState.cardNumber += 2;
+  if (partida.cardNumber > 7) {
+    partida.cardNumber += 2;
   }
-  return gameState.cardNumber;
+  return partida.cardNumber;
 }
 
 export function calculateScore(card: number): void {
   let cardValue: number = card >= 10 ? 0.5 : card;
-
-  gameState.score += cardValue;
+  partida.score += cardValue;
   showScore();
   handleGameOver();
 }
 
 function handleGameOver(): void {
   setTimeout(() => {
-    if (gameState.score > 7.5 && !gameState.isGameOver) {
+    if (partida.score > 7.5 && partida.state === "PLAYING") {
       alert("Game over");
       disableCardButton();
-      gameState.isGameOver = true;
-    } else if (gameState.score === 7.5 && !gameState.isGameOver) {
+      partida.state = "GAME_OVER";
+    } else if (partida.score === 7.5 && partida.state === "PLAYING") {
       alert("¡Lo has clavado! ¡Enhorabuena!");
       disableCardButton();
-      gameState.isGameOver = true;
+      partida.state = "PERFECT_SCORE";
     }
   }, 2000);
 }

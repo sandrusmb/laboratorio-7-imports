@@ -1,5 +1,5 @@
 import {
-  gameState,
+  partida,
   container,
   cardButton,
   containerSecondary,
@@ -16,8 +16,7 @@ export function showScore() {
     scoreContainer !== undefined &&
     scoreContainer instanceof HTMLParagraphElement
   ) {
-    scoreContainer.textContent =
-      "Puntuación:" + " " + gameState.score.toString();
+    scoreContainer.textContent = "Puntuación: " + partida.score.toString();
   }
 }
 
@@ -87,24 +86,26 @@ export function printCard(cardImageUrl: string): void {
     container !== undefined &&
     container instanceof HTMLDivElement
   ) {
-    if (!gameState.isFirstCard) {
+    if (!partida.isFirstCard) {
       container.innerHTML = "";
-      gameState.isFirstCard = true;
+      partida.isFirstCard = true;
     }
     container.innerHTML += `<img class="card" src="${cardImageUrl}" alt="Carta"/>`;
   }
 }
 
 export function showMessage() {
-  if (gameState.score > 7.5) {
+  const puntos = partida.score;
+
+  if (partida.state === "GAME_OVER") {
     alert("Game over");
-  } else if (gameState.score < 4) {
+  } else if (puntos < 4) {
     alert("Has sido muy conservador");
-  } else if (gameState.score === 5) {
+  } else if (puntos === 5) {
     alert("Te ha entrado el canguelo eh?");
-  } else if (gameState.score === 6 || gameState.score == 7) {
+  } else if (puntos === 6 || puntos === 7) {
     alert("Casi casi...");
-  } else if (gameState.score === 7.5) {
+  } else if (partida.state === "PERFECT_SCORE") {
     alert("¡Lo has clavado! ¡Enhorabuena!");
   }
 }
@@ -161,12 +162,12 @@ export function showInitialCardBack() {
     container instanceof HTMLDivElement
   ) {
     container.innerHTML = `<img class="card" src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg" alt="Carta boca abajo"/>`;
-    gameState.isFirstCard = false;
+    partida.isFirstCard = false; // Cambiado a 'partida'
   }
 }
 
 export function reset() {
-  gameState.score = 0;
+  partida.score = 0; // Cambiado a 'partida'
   showScore();
 
   if (
@@ -185,7 +186,8 @@ export function reset() {
     containerSecondary.innerHTML = "";
   }
 
-  gameState.isGameOver = false;
+  partida.state = "PLAYING";
+  partida.isFirstCard = false;
 
   enableCardButton();
   showInitialCardBack();
