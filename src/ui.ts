@@ -162,12 +162,12 @@ export function showInitialCardBack() {
     container instanceof HTMLDivElement
   ) {
     container.innerHTML = `<img class="card" src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg" alt="Carta boca abajo"/>`;
-    partida.isFirstCard = false; // Cambiado a 'partida'
+    partida.isFirstCard = false;
   }
 }
 
 export function reset() {
-  partida.score = 0; // Cambiado a 'partida'
+  partida.score = 0;
   showScore();
 
   if (
