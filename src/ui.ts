@@ -7,7 +7,7 @@ import {
   resetButton,
 } from "./modelo";
 
-import { giveMeCard, calculateScore } from "./motor";
+import { calculateRandomNumber } from "./motor";
 
 export function showScore() {
   let scoreContainer = document.querySelector(".score");
@@ -18,6 +18,14 @@ export function showScore() {
   ) {
     scoreContainer.textContent = "Puntuación: " + partida.score.toString();
   }
+}
+
+export function giveMeCard(): number {
+  calculateRandomNumber();
+  if (partida.cardNumber > 7) {
+    partida.cardNumber += 2;
+  }
+  return partida.cardNumber;
 }
 
 export function showCard(card: number): string {
@@ -108,6 +116,27 @@ export function showMessage() {
   } else if (partida.state === "PERFECT_SCORE") {
     alert("¡Lo has clavado! ¡Enhorabuena!");
   }
+}
+
+export function calculateScore(card: number): void {
+  let cardValue: number = card >= 10 ? 0.5 : card;
+  partida.score += cardValue;
+  showScore();
+  handleGameOver();
+}
+
+export function handleGameOver(): void {
+  setTimeout(() => {
+    if (partida.score > 7.5 && partida.state === "PLAYING") {
+      alert("Game over");
+      disableCardButton();
+      partida.state = "GAME_OVER";
+    } else if (partida.score === 7.5 && partida.state === "PLAYING") {
+      alert("¡Lo has clavado! ¡Enhorabuena!");
+      disableCardButton();
+      partida.state = "PERFECT_SCORE";
+    }
+  }, 2000);
 }
 
 export function disableCardButton() {
